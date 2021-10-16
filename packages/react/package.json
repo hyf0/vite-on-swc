@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-swc-react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "keywords": ["vite", "react", "swc", "vite react"],
   "author": "Yunfei He <i.heyunfei@gmail.com>",
   "description": "",

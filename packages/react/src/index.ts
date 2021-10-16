@@ -62,6 +62,7 @@ export default function swcReact(
             {
               filename: id,
               jsc: {
+                target: 'es2021',
                 parser: isTypescript
                   ? <TsParserConfig>{
                       syntax: 'typescript',
