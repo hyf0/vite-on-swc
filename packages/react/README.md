@@ -4,6 +4,19 @@
 - HMR Support in React Refresh
 - [New JSX Transform](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html)
 
+### Using template
+
+```
+npx degit iheyunfei/vite-swc-react-ts my-project
+// or using javascript template
+npx degit iheyunfei/vite-swc-react my-project
+
+cd my-project
+
+npm install
+npm run dev
+```
+
 # install
 
 ```

@@ -1,24 +1,43 @@
 lockfileVersion: 5.3
 
-specifiers:
-  '@swc/core': ^1.2.98
-  '@types/lodash.merge': ^4.6.6
-  '@types/node': ^16.11.0
-  lodash.merge: ^4.6.2
-  react-refresh: ^0.10.0
-  typescript: ^4.4.4
-  vite: ^2.6.7
+importers:
 
-dependencies:
-  '@swc/core': 1.2.98
-  '@types/node': 16.11.0
-  lodash.merge: 4.6.2
-  react-refresh: 0.10.0
+  .:
+    specifiers: {}
 
-devDependencies:
-  '@types/lodash.merge': 4.6.6
-  typescript: 4.4.4
-  vite: 2.6.7
+  packages/react:
+    specifiers:
+      '@swc/core': ^1.2.98
+      '@types/lodash.merge': ^4.6.6
+      '@types/node': ^16.11.0
+      lodash.merge: ^4.6.2
+      react-refresh: ^0.10.0
+      typescript: ^4.4.4
+      vite: ^2.6.7
+    dependencies:
+      '@swc/core': 1.2.98
+      lodash.merge: 4.6.2
+      react-refresh: 0.10.0
+    devDependencies:
+      '@types/lodash.merge': 4.6.6
+      '@types/node': 16.11.0
+      typescript: 4.4.4
+      vite: 2.6.7
+
+  packages/swc:
+    specifiers:
+      '@swc/core': ^1.2.98
+      '@types/lodash.merge': ^4.6.6
+      lodash.merge: ^4.6.2
+      typescript: ^4.4.4
+      vite: ^2.6.7
+    dependencies:
+      '@swc/core': 1.2.98
+      lodash.merge: 4.6.2
+    devDependencies:
+      '@types/lodash.merge': 4.6.6
+      typescript: 4.4.4
+      vite: 2.6.7
 
 packages:
 
@@ -162,7 +181,7 @@ packages:
 
   /@types/node/16.11.0:
     resolution: {integrity: sha512-8MLkBIYQMuhRBQzGN9875bYsOhPnf/0rgXGo66S2FemHkhbn9qtsz9ywV1iCG+vbjigE4WUNVvw37Dx+L0qsPg==}
-    dev: false
+    dev: true
 
   /esbuild-android-arm64/0.13.7:
     resolution: {integrity: sha512-yqCTKzmm3jiUXgi0yeKhvwZCZTqClUXwwMRAntcM9u/xvXhmpw0V0Z4qDEpnkmF2NCMzmJRH+DAAQ5whuf3CYA==}

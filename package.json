@@ -1,0 +1,9 @@
+{
+  "name": "vite-on-swc",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "repository": "https://github.com/iheyunfei/vite-on-swc",
+  "author": "Yunfei He <i.heyunfei@gmail.com>",
+  "license": "MIT"
+}

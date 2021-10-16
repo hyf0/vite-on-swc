@@ -1,9 +1,9 @@
 {
-  "name": "vite-plugin-swc-react",
-  "version": "0.1.0",
-  "keywords": ["vite", "react", "swc", "vite react"],
-  "author": "Yunfei He <i.heyunfei@gmail.com>",
+  "name": "vite-plugin-swc",
+  "version": "0.0.2",
   "description": "",
+  "keywords": ["vite", "swc"],
+  "author": "Yunfei He <i.heyunfei@gmail.com>",
   "main": "dist/index.js",
   "files": [
     "dist/*"
@@ -17,15 +17,13 @@
   "license": "ISC",
   "dependencies": {
     "@swc/core": "^1.2.98",
-    "lodash.merge": "^4.6.2",
-    "react-refresh": "^0.10.0"
+    "lodash.merge": "^4.6.2"
   },
   "peerDependencies": {
     "@swc/core": "^1.2.98",
     "vite": "^2.6.7"
   },
   "devDependencies": {
-    "@types/node": "^16.11.0",
     "@swc/core": "^1.2.98",
     "@types/lodash.merge": "^4.6.6",
     "typescript": "^4.4.4",
