@@ -1,4 +1,4 @@
-# vite-on-swc
+# Plugins
 
 ## [vite-plugin-swc-react](./packages/react/README.md)
 
