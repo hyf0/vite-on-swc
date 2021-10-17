@@ -10,12 +10,14 @@ importers:
       '@swc/core': ^1.2.98
       '@types/lodash.merge': ^4.6.6
       '@types/node': ^16.11.0
+      core-js: ^3.18.3
       lodash.merge: ^4.6.2
       react-refresh: ^0.10.0
       typescript: ^4.4.4
       vite: ^2.6.7
     dependencies:
       '@swc/core': 1.2.98
+      core-js: 3.18.3
       lodash.merge: 4.6.2
       react-refresh: 0.10.0
     devDependencies:
@@ -182,6 +184,11 @@ packages:
   /@types/node/16.11.0:
     resolution: {integrity: sha512-8MLkBIYQMuhRBQzGN9875bYsOhPnf/0rgXGo66S2FemHkhbn9qtsz9ywV1iCG+vbjigE4WUNVvw37Dx+L0qsPg==}
     dev: true
+
+  /core-js/3.18.3:
+    resolution: {integrity: sha512-tReEhtMReZaPFVw7dajMx0vlsz3oOb8ajgPoHVYGxr8ErnZ6PcYEvvmjGmXlfpnxpkYSdOQttjB+MvVbCGfvLw==}
+    requiresBuild: true
+    dev: false
 
   /esbuild-android-arm64/0.13.7:
     resolution: {integrity: sha512-yqCTKzmm3jiUXgi0yeKhvwZCZTqClUXwwMRAntcM9u/xvXhmpw0V0Z4qDEpnkmF2NCMzmJRH+DAAQ5whuf3CYA==}
