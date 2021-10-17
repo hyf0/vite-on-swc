@@ -6,7 +6,7 @@ import App from './App'
 import('react').then(console.log)
 ReactDOM.render(
   <React.StrictMode>
-    <div>hell</div>
+    <div>bar</div>
     <App />
   </React.StrictMode>,
   document.getElementById('root')

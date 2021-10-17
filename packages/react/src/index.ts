@@ -10,6 +10,7 @@ import {
   addReactFreshWrapper,
   reactRefreshRuntimeCode,
 } from './react-refresh-helper'
+import ReactRefreshBoundaryCollector from './ReactRefreshBoundaryCollector'
 
 export default function swcReact(
   options: {
@@ -57,9 +58,14 @@ export default function swcReact(
         if (/\.(js|[tj]sx?)$/.test(id)) {
           let isTypescript = ['.ts', '.tsx'].some((p) => id.endsWith(p))
           let is_SX = ['.jsx', '.tsx'].some((p) => id.endsWith(p))
-
+          const collector = new ReactRefreshBoundaryCollector()
           const resolveSWCOptions: SWCOptions = merge(
             {
+              ...(isDevelopment && is_SX
+                ? {
+                    plugin: swc.plugins([(p) => collector.visitProgram(p)]),
+                  }
+                : {}),
               filename: id,
               env: {
                 // copied from https://vitejs.dev/guide/build.html
@@ -91,12 +97,16 @@ export default function swcReact(
             swcOptions,
           )
           const transformed = await swc.transform(code, resolveSWCOptions)
-          
+
           return {
             ...transformed,
             code:
               isDevelopment && reactFresh
-                ? addReactFreshWrapper(id, transformed.code, is_SX) // FIXME: better checking for isReactRefreshBoundary
+                ? addReactFreshWrapper(
+                    id,
+                    transformed.code,
+                    collector.isReactRefreshBoundary,
+                  ) // FIXME: better checking for isReactRefreshBoundary
                 : transformed.code,
           }
         }

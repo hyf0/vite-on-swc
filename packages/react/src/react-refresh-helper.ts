@@ -41,6 +41,7 @@ export const addReactFreshWrapper = (
   code: string,
   isReactRefreshBoundary: boolean,
 ) => `
+
 let prevRefreshReg;
 let prevRefreshSig;
 const RefreshRuntime = window.$react_refresh_exports$;
@@ -61,6 +62,7 @@ if (import.meta.hot) {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
   ${isReactRefreshBoundary ? 'import.meta.hot.accept()' : ''}
-  RefreshRuntime.performReactRefresh
+  RefreshRuntime.performReactRefresh()
 }
+
 `

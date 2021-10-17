@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import logo from './logo.svg'
 import './App.css'
+import Foo from './Foo'
 
 function App() {
-  const [count, setCount] = useState(3)
+  const [count, setCount] = useState(2)
 
   return (
     <div className="App">
+      <Foo />
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>Hello Vite + React</p>
