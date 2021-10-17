@@ -91,15 +91,14 @@ export default function swcReact(
             swcOptions,
           )
           const transformed = await swc.transform(code, resolveSWCOptions)
-          if (isDevelopment) {
-            return {
-              ...transformed,
-              code: reactFresh
+          
+          return {
+            ...transformed,
+            code:
+              isDevelopment && reactFresh
                 ? addReactFreshWrapper(id, transformed.code, is_SX) // FIXME: better checking for isReactRefreshBoundary
                 : transformed.code,
-            }
           }
-          return transformed
         }
       },
     },
