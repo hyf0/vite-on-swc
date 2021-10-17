@@ -46,6 +46,6 @@ export default defineConfig({
 
 **tl;dr. Do not worry about the polyfill unless your target browser only supports ES5.**
 
-- `vite-plugin-swc-react` using the (suggested browserslist)[https://vitejs.dev/guide/build.html#browser-compatibility] as default options to determine whether to import what polyfill and transpile syntax.
+- `vite-plugin-swc-react` using the [suggested browserslist](https://vitejs.dev/guide/build.html#browser-compatibility) as default options to determine whether to import what polyfill and transpile syntax.
 
-- `vite-plugin-swc-react` respects `.swcrc` and `browserslist`, If you wan't customize the target browsers, see (preset-env)[https://swc.rs/docs/preset-env] options.
+- `vite-plugin-swc-react` respects `.swcrc` and `browserslist`, If you wan't customize the target browsers, see [preset-env](https://swc.rs/docs/preset-env) options.
