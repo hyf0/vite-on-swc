@@ -1,6 +1,6 @@
 # Plugins
 
-## [vite-plugin-swc-react](./packages/react/README.md)
+## [vite-plugin-swc-react](./packages/react)
 
 ### features
 
