@@ -45,6 +45,21 @@ export default defineConfig({
 
 - `vite-plugin-swc-react` respects `.swcrc` and `browserslist`, If you wan't customize the target browsers, see [preset-env](https://swc.rs/docs/preset-env) options.
 
+### disable polyfill
+
+You could pass options beblow to disable polyfill.
+
+```ts
+import { defineConfig } from 'vite'
+import swcReact from 'vite-plugin-swc-react'
+
+export default defineConfig({
+  plugins: [swcReact({
+    env: null,
+  })],
+})
+```
+
 ### ES5
 
 If your target browser only supports ES5, you may want to checkout  [`@vitejs/plugin-legacy`](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy).

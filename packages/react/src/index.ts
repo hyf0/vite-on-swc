@@ -75,12 +75,14 @@ export default function swcReact(
                 coreJs: 3,
               },
               jsc: {
+                // the env options will overwrite jsc#target.
+                target: 'es2021',
                 parser: isTypescript
                   ? <TsParserConfig>{
                       syntax: 'typescript',
                       tsx: is_SX,
                     }
-                  : <EsParserConfig>{
+                    : <EsParserConfig>{
                       syntax: 'ecmascript',
                       jsx: is_SX,
                     },
