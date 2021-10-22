@@ -1,3 +1,5 @@
+# vite-plugin-swc-react
+
 # features
 
 - [Speedy Compiling in SWC](https://swc.rs/docs/configuring-swc)
