@@ -60,7 +60,7 @@ export default function swcReact(
           let is_SX = ['.jsx', '.tsx'].some((p) => id.endsWith(p))
           const collector = new ReactRefreshBoundaryCollector()
           const resolveSWCOptions: SWCOptions = merge(
-            {
+            <SWCOptions>{
               ...(isDevelopment && is_SX
                 ? {
                     plugin: swc.plugins([(p) => collector.visitProgram(p)]),
@@ -69,8 +69,8 @@ export default function swcReact(
               filename: id,
               env: {
                 // copied from https://vitejs.dev/guide/build.html
-                targets:
-                  'defaults and supports es6-module and supports es6-module-dynamic-import, not opera > 0, not samsung > 0, not and_qq > 0',
+                // targets:
+                //   'defaults and supports es6-module and supports es6-module-dynamic-import, not opera > 0, not samsung > 0, not and_qq > 0',
                 mode: 'usage',
                 coreJs: 3,
               },
