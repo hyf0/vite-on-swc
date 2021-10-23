@@ -70,15 +70,9 @@ And remember to disable the behavior of polyfill and transpiling in `vite-plugin
 
 ```ts
 export default defineConfig({
-  plugins: [
-    react({
-      swcOptions: {
-        env: {
-          targets: []
-        }
-      }
-    }),
-  ],
+  plugins: [swcReact({
+    env: null,
+  })],
 })
 ```
 
