@@ -7,8 +7,7 @@
 - [Speedy Compiling in SWC](https://swc.rs/docs/configuring-swc)
 - HMR Support in React Refresh
 - [New JSX Transform](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html)
-- [Automatic Polyfill and Transpiler in SWC](https://swc.rs/docs/preset-env)
-
+- [Polyfill and Transpiler in SWC](https://swc.rs/docs/preset-env)
 
 ### Using template
 
@@ -44,8 +43,71 @@ export default defineConfig({
 
 #### Polyfill and Transpiler
 
-**tl;dr. Do not worry about the polyfill unless your target browser only supports ES5.**
+To enable polyfill, you would need to
 
-- `vite-plugin-swc-react` using the [suggested browserslist](https://vitejs.dev/guide/build.html#browser-compatibility) as default options to determine whether to import what polyfill and transpile syntax.
+- install `browserlist` as a devDependency
+- install `core-js` as a dependency
+- pass options like
 
-- `vite-plugin-swc-react` respects `.swcrc` and `browserslist`, If you wan't customize the target browsers, see [preset-env](https://swc.rs/docs/preset-env) options.
+```ts
+import { defineConfig } from 'vite'
+import swcReact from 'vite-plugin-swc-react'
+
+export default defineConfig({
+  plugins: [
+    swcReact({
+      swcOptions: {
+        env: {
+          // https://vitejs.dev/guide/build.html#browser-compatibility
+          targets: 'defaults and supports es6-module and supports es6-module-dynamic-import, not opera > 0, not samsung > 0, not and_qq > 0',
+          mode: 'usage',
+          coreJs: 3,
+        }
+      }
+    }),
+  ],
+})
+
+```
+
+##### ES5
+
+If your target browser only supports ES5, you may want to checkout  [`@vitejs/plugin-legacy`](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy).
+
+#### disable HMR
+
+```ts
+import { defineConfig } from 'vite'
+import swcReact from 'vite-plugin-swc-react'
+
+export default defineConfig({
+  plugins: [
+    swcReact({
+      reactFresh: false,
+    }),
+  ],
+})
+```
+
+#### classic JSX runtime
+
+```ts
+import { defineConfig } from 'vite'
+import swcReact from 'vite-plugin-swc-react'
+
+export default defineConfig({
+  plugins: [
+    swcReact({
+      swcOptions: {
+        jsc: {
+          transform: {
+            react: {
+              runtime: 'classic',
+            },
+          },
+        },
+      },
+    }),
+  ],
+})
+```

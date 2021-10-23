@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-swc-react",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "keywords": [
     "vite",
     "react",
@@ -22,7 +22,6 @@
   "license": "ISC",
   "dependencies": {
     "@swc/core": "^1.2.98",
-    "core-js": "^3.18.3",
     "lodash.merge": "^4.6.2",
     "react-refresh": "^0.10.0"
   },
