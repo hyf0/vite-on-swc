@@ -38,7 +38,7 @@ export default function swcReact(
 
   const ctx = {
     get isEnableReactRefresh() {
-      return !isDevelopment && reactFresh
+      return isDevelopment && reactFresh
     },
   }
 
@@ -65,7 +65,7 @@ export default function swcReact(
         }
       },
       async transform(code, id) {
-        if (/\.(js|mjs|jsx|ts|tsx)$/.test(id)) {
+        if (!id.includes('node_modules') && /\.(js|mjs|jsx|ts|tsx)$/.test(id)) {
           const isTS = /\.(ts|tsx)$/.test(id)
           const is_SX = !id.endsWith('.ts')
 
