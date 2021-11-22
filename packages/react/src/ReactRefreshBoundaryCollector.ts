@@ -1,4 +1,8 @@
-import { ModuleDeclaration } from '@swc/core'
+import {
+  CallExpression,
+  ExportDefaultExpression,
+  ModuleDeclaration,
+} from '@swc/core'
 import Visitor from '@swc/core/Visitor'
 
 function isComponentLikeName(name: string): boolean {
@@ -35,21 +39,18 @@ export default class ReactRefreshBoundaryCollector extends Visitor {
       type === 'TsImportEqualsDeclaration' ||
       type === 'TsNamespaceExportDeclaration'
     ) {
-      // we don't care about these types
+      // We don't care about these nodes
     } else if (type === 'ExportAllDeclaration') {
       // export * from './foo'
       this.areAllExportsComponents = false
     } else if (type === 'ExportDefaultExpression') {
-      const { expression } = moduleDecl
-      const { type } = expression
-      if (type === 'Identifier') {
+      const { expression: exp } = moduleDecl
+      if (exp.type === 'Identifier') {
         // export default Foo
-        this.areAllExportsComponents = isComponentLikeName(expression.value)
-      } else if (type === 'CallExpression') {
+        this.areAllExportsComponents = isComponentLikeName(exp.value)
+      } else if (exp.type === 'CallExpression') {
         // export default memo(Component)
-        this.areAllExportsComponents =
-          expression.callee.type === 'Identifier' &&
-          expression.callee.value === 'memo'
+        this.areAllExportsComponents = getIsFnCallOfMemoWithComponent(exp)
       } else {
         this.areAllExportsComponents = false
       }
@@ -66,56 +67,64 @@ export default class ReactRefreshBoundaryCollector extends Visitor {
         type === 'TsTypeAliasDeclaration'
       ) {
         // noop
-      } else if (
-        type === 'FunctionDeclaration' ||
-        type === 'ClassDeclaration'
-      ) {
+      } else if (type === 'ClassDeclaration') {
+        this.areAllExportsComponents = false
+      } else if (type === 'FunctionDeclaration') {
         this.areAllExportsComponents = isComponentLikeName(
           declaration.identifier.value,
         )
       } else if (type === 'VariableDeclaration') {
         this.areAllExportsComponents = declaration.declarations
-          .flatMap((decl) =>
-            decl.id.type === 'Identifier' ? [decl.id.value] : [],
+          .flatMap((declarator) =>
+            declarator.id.type === 'Identifier' ? [declarator.id.value] : [],
           )
           .every((name) => isComponentLikeName(name))
       } else {
         neverCheck(type)
       }
     } else if (type === 'ExportDefaultDeclaration') {
+      // export default function Foo() {}
+      // export default class Foo {}
       const { decl } = moduleDecl
-      const { type } = decl
-      if (type === 'TsInterfaceDeclaration') {
-        // noop
-      } else if (
-        type === 'FunctionExpression' ||
-        type === 'ClassExpression'
+      if (
+        decl.type === 'FunctionExpression'
       ) {
         this.areAllExportsComponents = isComponentLikeName(
           decl.identifier.value,
         )
-      } else {
-        neverCheck(type)
+      } else if (decl.type === 'ClassExpression') {
+        this.areAllExportsComponents = false
       }
     } else if (type === 'ExportNamedDeclaration') {
-      this.areAllExportsComponents = moduleDecl.specifiers
-        .map((s) => {
-          switch (s.type) {
-            case 'ExportNamespaceSpecifier': {
-              return s.name.value
-            }
-            case 'ExportDefaultSpecifier': {
-              return s.exported.value
-            }
-            case 'ExportSpecifier': {
-              return s.orig.value
-            }
+      for (const s of moduleDecl.specifiers) {
+        let exportName: string
+        if (s.type === 'ExportNamespaceSpecifier') {
+          this.areAllExportsComponents = false
+          break
+        } else if (s.type == 'ExportDefaultSpecifier') {
+          exportName = s.exported.value
+        } else {
+          exportName = s.exported?.value ?? s.orig.value
+          if (exportName === 'default') {
+            exportName = s.orig.value
           }
-        })
-        .every((name) => isComponentLikeName(name))
+        }
+        this.areAllExportsComponents = isComponentLikeName(exportName)
+      }
     } else {
       neverCheck(type)
     }
     return moduleDecl
   }
+}
+
+const getIsFnCallOfMemoWithComponent = (exp: CallExpression) => {
+  const isMemoFn =
+    exp.callee.type === 'Identifier' && exp.callee.value === 'memo'
+
+  const isPassComponentLike =
+    exp.arguments[0] &&
+    exp.arguments[0].expression.type === 'Identifier' &&
+    isComponentLikeName(exp.arguments[0].expression.value)
+  return isMemoFn && isPassComponentLike
 }

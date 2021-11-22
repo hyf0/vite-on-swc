@@ -36,15 +36,25 @@ export default function swcReact(
 
   let isDevelopment = false
 
+  const ctx = {
+    get isEnableReactRefresh() {
+      return !isDevelopment && reactFresh
+    },
+  }
+
   return [
     {
       name: 'vite-plugin-swc-react',
       enforce: 'pre',
-      config(_config, env) {
+      config(config, env) {
         isDevelopment = env.mode === 'development'
+
+        // Disable esbuild for transforming
+        config.esbuild = false
       },
       transformIndexHtml() {
-        if (isDevelopment && reactFresh) {
+        if (ctx.isEnableReactRefresh) {
+          // Inject react refresh runtime
           return [
             {
               tag: 'script',
@@ -55,40 +65,38 @@ export default function swcReact(
         }
       },
       async transform(code, id) {
-        if (/\.(js|[tj]sx?)$/.test(id)) {
-          let isTypescript = ['.ts', '.tsx'].some((p) => id.endsWith(p))
-          let is_SX = ['.jsx', '.tsx'].some((p) => id.endsWith(p))
-          const collector = new ReactRefreshBoundaryCollector()
-          const resolveSWCOptions: SWCOptions = merge(
-            <SWCOptions>{
-              ...(isDevelopment && is_SX
-                ? {
-                    plugin: swc.plugins([(p) => collector.visitProgram(p)]),
-                  }
-                : {}),
-              filename: id,
-              jsc: {
-                target: 'es2021',
-                parser: isTypescript
-                  ? <TsParserConfig>{
-                      syntax: 'typescript',
-                      tsx: is_SX,
-                    }
-                    : <EsParserConfig>{
-                      syntax: 'ecmascript',
-                      jsx: is_SX,
-                    },
-                transform: {
-                  react: {
-                    development: isDevelopment,
-                    runtime: jsxRuntime,
-                    refresh: reactFresh,
-                  },
+        if (/\.(js|mjs|jsx|ts|tsx)$/.test(id)) {
+          const isTS = /\.(ts|tsx)$/.test(id)
+          const is_SX = !id.endsWith('.ts')
+
+          const collector =
+            isDevelopment && is_SX ? new ReactRefreshBoundaryCollector() : null
+
+          const options: SWCOptions = {
+            ...(collector
+              ? {
+                  plugin: swc.plugins([(p) => collector.visitProgram(p)]),
+                }
+              : null),
+            filename: id,
+            jsc: {
+              target: 'es2021',
+              parser: {
+                syntax: isTS ? 'typescript' : 'ecmascript',
+                [isTS ? 'tsx' : 'jsx']: is_SX,
+              },
+              transform: {
+                react: {
+                  development: isDevelopment,
+                  runtime: jsxRuntime,
+                  refresh: ctx.isEnableReactRefresh,
                 },
               },
             },
-            swcOptions,
-          )
+          }
+
+          const resolveSWCOptions = merge(options, swcOptions)
+
           const transformed = await swc.transform(code, resolveSWCOptions)
 
           return {
@@ -98,7 +106,7 @@ export default function swcReact(
                 ? addReactFreshWrapper(
                     id,
                     transformed.code,
-                    collector.isReactRefreshBoundary,
+                    collector?.isReactRefreshBoundary ?? false,
                   ) // FIXME: better checking for isReactRefreshBoundary
                 : transformed.code,
           }

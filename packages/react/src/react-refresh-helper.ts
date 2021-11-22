@@ -1,4 +1,5 @@
-// The codes are inspired and copied from https://github.com/facebook/react/issues/16604 and https://github.com/vitejs/vite/tree/main/packages/plugin-react
+// The code are inspired and copied from https://github.com/facebook/react/issues/16604 and https://github.com/vitejs/vite/tree/main/packages/plugin-react
+
 import fs from 'fs'
 
 const runtimeFilePath = require.resolve(
