@@ -10,7 +10,7 @@ import {
   addReactFreshWrapper,
   reactRefreshRuntimeCode,
 } from './react-refresh-helper'
-import ReactRefreshBoundaryCollector from './ReactRefreshBoundaryCollector'
+import ExportNameCollector from './ExportNameCollector'
 
 export default function swcReact(
   options: {
@@ -70,7 +70,7 @@ export default function swcReact(
           const is_SX = !id.endsWith('.ts')
 
           const collector =
-            isDevelopment && is_SX ? new ReactRefreshBoundaryCollector() : null
+            isDevelopment && is_SX ? new ExportNameCollector() : null
 
           const options: SWCOptions = {
             ...(collector
@@ -102,12 +102,12 @@ export default function swcReact(
           return {
             ...transformed,
             code:
-              isDevelopment && reactFresh
+              isDevelopment && reactFresh && collector
                 ? addReactFreshWrapper(
                     id,
                     transformed.code,
-                    collector?.isReactRefreshBoundary ?? false,
-                  ) // FIXME: better checking for isReactRefreshBoundary
+                    collector
+                  )
                 : transformed.code,
           }
         }

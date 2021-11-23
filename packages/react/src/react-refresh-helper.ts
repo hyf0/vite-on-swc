@@ -1,6 +1,7 @@
 // The code are inspired and copied from https://github.com/facebook/react/issues/16604 and https://github.com/vitejs/vite/tree/main/packages/plugin-react
 
 import fs from 'fs'
+import ExportNameCollector from './ExportNameCollector'
 
 const runtimeFilePath = require.resolve(
   'react-refresh/cjs/react-refresh-runtime.development.js',
@@ -40,9 +41,27 @@ if (process.env.NODE_ENV !== 'production' && typeof window !== 'undefined') {
 export const addReactFreshWrapper = (
   id: string,
   code: string,
-  isReactRefreshBoundary: boolean,
-) => `
+  collector: ExportNameCollector,
+) => {
+  let updater: string
+  if (
+    collector.isAbsolutelyNotReactRefreshBoundary ||
+    collector.exportedNames.size === 0
+  ) {
+    updater = ''
+  } else {
+    updater = `
+    if (${[...collector.exportedNames.values()]
+      // .map((name) => `typeof ${name} === 'function'`)
+      .map((name) => `RefreshRuntime.isLikelyComponentType(${name})`)
+      .join('&&')}) {
+      import.meta.hot.accept()
+    } else {
+    }
+`
+  }
 
+  return `
 let prevRefreshReg;
 let prevRefreshSig;
 const RefreshRuntime = window.$react_refresh_exports$;
@@ -62,8 +81,7 @@ ${code}
 if (import.meta.hot) {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
-  ${isReactRefreshBoundary ? 'import.meta.hot.accept()' : ''}
+  ${updater}
   RefreshRuntime.performReactRefresh()
+}`
 }
-
-`
