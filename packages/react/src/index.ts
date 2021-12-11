@@ -1,8 +1,7 @@
-import * as swc from '@swc/core'
+import * as swcCore from '@swc/core'
+
 import {
   Options as SWCOptions,
-  TsParserConfig,
-  EsParserConfig,
 } from '@swc/core'
 import { PluginOption } from 'vite'
 import merge from 'lodash.merge'
@@ -25,9 +24,17 @@ export default function swcReact(
     /**
      * See https://swc.rs/docs/configuring-swc
      */
-    swcOptions?: SWCOptions
+    swcOptions?: SWCOptions,
+    /**
+     * ```ts
+     * import * as yourOwnSWC from '@swc/core'
+     * swcReact({ unsafe_injectSWC: yourOwnSWC })
+     * ```
+     */
+    unsafe_injectSWC?: any,
   } = {},
 ): PluginOption[] {
+  const swc: typeof swcCore = options?.unsafe_injectSWC ?? swcCore;
   const {
     reactFresh = true,
     swcOptions = {},

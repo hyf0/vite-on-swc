@@ -5,6 +5,7 @@ import {
   ExportDefaultExpression,
   ExportNamedDeclaration,
   ModuleDeclaration,
+  TsType,
 } from '@swc/core'
 import Visitor from '@swc/core/Visitor'
 
@@ -19,6 +20,10 @@ function neverCheck(foo: never): never {
 export default class ExportNameCollector extends Visitor {
   exportedNames = new Set<string>()
   isAbsolutelyNotReactRefreshBoundary = false
+
+  visitTsType(n: TsType): TsType {
+    return n
+  }
 
   addName(name: string) {
     if (isComponentLikeName(name)) {
