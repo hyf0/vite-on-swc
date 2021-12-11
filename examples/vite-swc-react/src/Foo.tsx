@@ -1,2 +1,2 @@
-export const Foo = () => <div>jell2o111xx2313</div>
+export const Foo = () => <div>jell2o111x  </div>
 export default Foo

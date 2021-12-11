@@ -57,6 +57,9 @@ export const addReactFreshWrapper = (
       .join('&&')}) {
       import.meta.hot.accept()
     } else {
+      // For now, calling import.meta.hot.invalidate() simply reloads the page. https://vitejs.dev/guide/api-hmr.html#hot-dispose-cb
+      // TODO: We should ask user before reloading the page.
+      import.meta.hot.invalidate()
     }
 `
   }

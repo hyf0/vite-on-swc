@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-swc-react",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "keywords": [
     "vite",
     "react",
@@ -10,13 +10,19 @@
   "author": "Yunfei He <i.heyunfei@gmail.com>",
   "description": "",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "exports": {
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.js"
+  },
   "files": [
     "dist/*"
   ],
   "scripts": {
     "prepack": "pnpm build",
-    "build": "pnpm tsc -b",
-    "dev": "pnpm tsc -b --watch",
+    "dev": "pnpm build -- --watch",
+    "clean": "rimraf dist",
+    "build": "pnpm clean && tsup src/index.ts --dts --format cjs,esm --no-splitting",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "license": "ISC",
